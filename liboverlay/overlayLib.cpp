@@ -1479,9 +1479,30 @@ bool OverlayDataChannel::mapRotatorMemory(int num_buffers, bool uiChannel, int r
     mPmemAddr = data.base;
     mBufferType = data.allocType;
 
-    // Set this flag if source memory is fb
-    if(uiChannel)
-        mRotData.src.flags |= MDP_MEMORY_ID_TYPE_FB;
+    if (mPmemAddr == MAP_FAILED) {
+        mPmemFD = open("/dev/pmem_adsp", O_RDWR | O_SYNC);
+        if (mPmemFD < 0) {
+            reportError("Cant open pmem_adsp ");
+            close(mFD);
+            mFD = -1;
+            close(mRotFD);
+            mRotFD = -1;
+            return false;
+        } else {
+            mPmemAddr = (void *) mmap(NULL, mPmemOffset * num_buffers, PROT_READ | PROT_WRITE,
+                                      MAP_SHARED, mPmemFD, 0);
+            if (mPmemAddr == MAP_FAILED) {
+                reportError("Cant map pmem_adsp ");
+                close(mFD);
+                mFD = -1;
+                close(mPmemFD);
+                mPmemFD = -1;
+                close(mRotFD);
+                mRotFD = -1;
+                return false;
+            }
+        }
+    }
 
     mOvDataRot.data.memory_id = mPmemFD;
     mRotData.dst.memory_id = mPmemFD;
