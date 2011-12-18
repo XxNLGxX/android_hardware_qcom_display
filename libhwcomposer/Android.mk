@@ -15,6 +15,7 @@ LOCAL_CFLAGS:= -DLOG_TAG=\"$(TARGET_BOARD_PLATFORM).hwcomposer\"
 LOCAL_C_INCLUDES += hardware/qcom/display/libgralloc
 LOCAL_C_INCLUDES += hardware/qcom/display/liboverlay
 LOCAL_C_INCLUDES += hardware/qcom/display/libcopybit
+LOCAL_C_INCLUDES += bionic/libc/kernel/common
 ifeq ($(TARGET_HAVE_HDMI_OUT),true)
 LOCAL_CFLAGS += -DHDMI_DUAL_DISPLAY
 endif
