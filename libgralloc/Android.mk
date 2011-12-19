@@ -17,6 +17,7 @@ LOCAL_PATH := $(call my-dir)
 
 # HAL module implemenation, not prelinked and stored in
 # hw/<OVERLAY_HARDWARE_MODULE_ID>.<ro.product.board>.so
+ifeq (false,true)
 include $(CLEAR_VARS)
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
@@ -50,6 +51,7 @@ ifeq ($(TARGET_GRALLOC_USES_ASHMEM),true)
 endif
 
 include $(BUILD_SHARED_LIBRARY)
+endif
 
 #MemAlloc Library
 include $(CLEAR_VARS)
